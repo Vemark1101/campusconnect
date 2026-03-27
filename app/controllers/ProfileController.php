@@ -1,10 +1,12 @@
 <?php
 require_once __DIR__ . '/../models/UserModel.php';
 require_once __DIR__ . '/../models/PostModel.php';
+require_once __DIR__ . '/../models/NotificationModel.php';
 
 class ProfileController {
     private $userModel;
     private $postModel;
+    private $notificationModel;
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
@@ -12,6 +14,7 @@ class ProfileController {
         }
         $this->userModel = new UserModel();
         $this->postModel = new PostModel();
+        $this->notificationModel = new NotificationModel();
     }
 
     private function requireAuth() {
@@ -23,6 +26,13 @@ class ProfileController {
 
     private function setFlash($type, $message) {
         $_SESSION['flash_' . $type] = $message;
+    }
+
+    private function loadNotifications() {
+        return [
+            $this->notificationModel->getRecentByUser($_SESSION['user_id']),
+            $this->notificationModel->countUnreadByUser($_SESSION['user_id'])
+        ];
     }
 
     private function uploadProfileImage($fieldName) {
@@ -114,6 +124,7 @@ class ProfileController {
 
         $user = $this->userModel->getUserById($_SESSION['user_id']);
         $posts = $this->postModel->getByUserId($_SESSION['user_id']);
+        [$notifications, $unreadCount] = $this->loadNotifications();
 
         require_once __DIR__ . '/../views/profile.php';
     }
@@ -123,6 +134,7 @@ class ProfileController {
 
         $keyword = trim((string) ($_GET['keyword'] ?? ''));
         $users = $keyword === '' ? [] : $this->userModel->search($keyword);
+        [$notifications, $unreadCount] = $this->loadNotifications();
 
         require_once __DIR__ . '/../views/search.php';
     }
