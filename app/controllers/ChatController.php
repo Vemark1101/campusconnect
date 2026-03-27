@@ -33,9 +33,11 @@ class ChatController {
         $this->chatModel->updateLastActive($_SESSION['user_id']);
 
         // Handle sending message
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['content'])) {
-            $content = htmlspecialchars($_POST['content']);
-            $this->chatModel->sendMessage($_SESSION['user_id'], $receiverId, $content);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $content = trim((string) ($_POST['content'] ?? ''));
+            if ($content !== '') {
+                $this->chatModel->sendMessage($_SESSION['user_id'], $receiverId, $content);
+            }
         }
 
         // Get messages between users
