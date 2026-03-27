@@ -11,21 +11,70 @@ class CommentController {
         $this->commentModel = new CommentModel();
     }
 
-    public function add() {
+    private function requireAuth() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?action=login");
             exit();
         }
+    }
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'], $_POST['content'])) {
+    private function setFlash($type, $message) {
+        $_SESSION['flash_' . $type] = $message;
+    }
 
-            $post_id = $_POST['post_id'];
-            $content = htmlspecialchars($_POST['content']);
+    public function add() {
+        $this->requireAuth();
 
-            $this->commentModel->addComment($post_id, $_SESSION['user_id'], $content);
+        $postId = (int) ($_POST['post_id'] ?? 0);
+        $content = trim((string) ($_POST['content'] ?? ''));
 
-            header("Location: index.php?action=home");
-            exit();
+        if ($postId <= 0 || $content === '') {
+            $this->setFlash('error', 'Comment cannot be empty.');
+        } else {
+            $this->commentModel->addComment($postId, $_SESSION['user_id'], $content);
+            $this->setFlash('success', 'Comment added.');
         }
+
+        header("Location: index.php?action=home");
+        exit();
+    }
+
+    public function update() {
+        $this->requireAuth();
+
+        $commentId = (int) ($_POST['comment_id'] ?? 0);
+        $content = trim((string) ($_POST['content'] ?? ''));
+        $comment = $this->commentModel->getCommentById($commentId);
+
+        if (!$comment || (int) $comment['user_id'] !== (int) $_SESSION['user_id']) {
+            $this->setFlash('error', 'You can only edit your own comments.');
+        } elseif ($content === '') {
+            $this->setFlash('error', 'Comment cannot be empty.');
+            header("Location: index.php?action=home&edit_comment=" . $commentId);
+            exit();
+        } else {
+            $this->commentModel->updateComment($commentId, $_SESSION['user_id'], $content);
+            $this->setFlash('success', 'Comment updated.');
+        }
+
+        header("Location: index.php?action=home");
+        exit();
+    }
+
+    public function delete() {
+        $this->requireAuth();
+
+        $commentId = (int) ($_POST['comment_id'] ?? 0);
+        $comment = $this->commentModel->getCommentById($commentId);
+
+        if (!$comment || (int) $comment['user_id'] !== (int) $_SESSION['user_id']) {
+            $this->setFlash('error', 'You can only delete your own comments.');
+        } else {
+            $this->commentModel->deleteComment($commentId, $_SESSION['user_id']);
+            $this->setFlash('success', 'Comment deleted.');
+        }
+
+        header("Location: index.php?action=home");
+        exit();
     }
 }
