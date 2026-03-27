@@ -1,14 +1,20 @@
 <?php
 require_once __DIR__ . '/../models/CommentModel.php';
+require_once __DIR__ . '/../models/PostModel.php';
+require_once __DIR__ . '/../models/NotificationModel.php';
 
 class CommentController {
     private $commentModel;
+    private $postModel;
+    private $notificationModel;
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
         $this->commentModel = new CommentModel();
+        $this->postModel = new PostModel();
+        $this->notificationModel = new NotificationModel();
     }
 
     private function requireAuth() {
@@ -34,6 +40,16 @@ class CommentController {
             $this->setFlash('error', 'Comment must be 500 characters or fewer.');
         } else {
             $this->commentModel->addComment($postId, $_SESSION['user_id'], $content);
+            $post = $this->postModel->getById($postId);
+            if ($post) {
+                $this->notificationModel->createNotification(
+                    (int) $post['user_id'],
+                    (int) $_SESSION['user_id'],
+                    'comment',
+                    ($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Someone') . ' commented on your post.',
+                    'index.php?action=home'
+                );
+            }
             $this->setFlash('success', 'Comment added.');
         }
 
