@@ -66,6 +66,7 @@ class ProfileController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim((string) ($_POST['full_name'] ?? ''));
             $bio = trim((string) ($_POST['bio'] ?? ''));
+            $newProfileImage = null;
 
             if ($name === '') {
                 $this->setFlash('error', 'Full name is required.');
@@ -73,8 +74,17 @@ class ProfileController {
                 exit();
             }
 
-            $this->userModel->updateProfile($_SESSION['user_id'], $name, $bio);
-            $_SESSION['full_name'] = $name;
+            if (mb_strlen($name) > 100) {
+                $this->setFlash('error', 'Full name must be 100 characters or fewer.');
+                header("Location: index.php?action=profile");
+                exit();
+            }
+
+            if (mb_strlen($bio) > 500) {
+                $this->setFlash('error', 'Bio must be 500 characters or fewer.');
+                header("Location: index.php?action=profile");
+                exit();
+            }
 
             if (!empty($_FILES['profile_pic']['name'])) {
                 [$ok, $imageOrError] = $this->uploadProfileImage('profile_pic');
@@ -85,9 +95,16 @@ class ProfileController {
                 }
 
                 if ($imageOrError !== null) {
-                    $this->userModel->updateProfilePic($_SESSION['user_id'], $imageOrError);
-                    $_SESSION['profile_pic'] = $imageOrError;
+                    $newProfileImage = $imageOrError;
                 }
+            }
+
+            $this->userModel->updateProfile($_SESSION['user_id'], $name, $bio);
+            $_SESSION['full_name'] = $name;
+
+            if ($newProfileImage !== null) {
+                $this->userModel->updateProfilePic($_SESSION['user_id'], $newProfileImage);
+                $_SESSION['profile_pic'] = $newProfileImage;
             }
 
             $this->setFlash('success', 'Profile updated successfully.');
