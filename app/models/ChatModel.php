@@ -1,16 +1,21 @@
 <?php
-require_once __DIR__ . '/UserModel.php';
+require_once __DIR__ . '/../../config/database.php';
 
 class ChatModel {
     private $conn;
 
     public function __construct() {
-        $this->conn = new PDO("mysql:host=localhost;dbname=campusconnect", "root", "");
-        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $database = new Database();
+        $this->conn = $database->connect();
     }
 
     // Send message
     public function sendMessage($senderId, $receiverId, $content) {
+        $content = trim($content);
+        if ($content === '') {
+            return false;
+        }
+
         $stmt = $this->conn->prepare("INSERT INTO messages (sender_id, receiver_id, content) VALUES (?, ?, ?)");
         return $stmt->execute([$senderId, $receiverId, $content]);
     }
