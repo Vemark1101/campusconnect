@@ -2,11 +2,13 @@
 require_once __DIR__ . '/../models/PostModel.php';
 require_once __DIR__ . '/../models/CommentModel.php';
 require_once __DIR__ . '/../models/LikeModel.php';
+require_once __DIR__ . '/../models/NotificationModel.php';
 
 class PostController {
     private $postModel;
     private $commentModel;
     private $likeModel;
+    private $notificationModel;
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
@@ -15,6 +17,7 @@ class PostController {
         $this->postModel = new PostModel();
         $this->commentModel = new CommentModel();
         $this->likeModel = new LikeModel();
+        $this->notificationModel = new NotificationModel();
     }
 
     private function requireAuth() {
@@ -30,6 +33,13 @@ class PostController {
 
     private function sanitizeText($value) {
         return trim((string) $value);
+    }
+
+    private function loadNotifications() {
+        return [
+            $this->notificationModel->getRecentByUser($_SESSION['user_id']),
+            $this->notificationModel->countUnreadByUser($_SESSION['user_id'])
+        ];
     }
 
     private function handlePostImageUpload($fieldName) {
@@ -83,6 +93,7 @@ class PostController {
         $posts = $this->enrichPosts($this->postModel->getAll());
         $editingPostId = isset($_GET['edit_post']) ? (int) $_GET['edit_post'] : 0;
         $editingCommentId = isset($_GET['edit_comment']) ? (int) $_GET['edit_comment'] : 0;
+        [$notifications, $unreadCount] = $this->loadNotifications();
 
         require_once __DIR__ . '/../views/home.php';
     }
