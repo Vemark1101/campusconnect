@@ -51,6 +51,19 @@ CREATE TABLE IF NOT EXISTS messages (
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    actor_id INT NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    message VARCHAR(255) NOT NULL,
+    link VARCHAR(255) DEFAULT 'index.php?action=home',
+    is_read TINYINT(1) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (actor_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 INSERT INTO users (username, password, full_name, bio, profile_pic)
 VALUES
 ('demo_admin', '$2y$10$gd5LdnX6zerH8MuFSH5C1O4pe7eVP5iTivXtOPRVypatd2WGxdqAK', 'Demo Admin', 'CampusConnect demo administrator account.', 'default-avatar.svg'),
