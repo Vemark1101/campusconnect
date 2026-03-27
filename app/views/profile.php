@@ -4,33 +4,48 @@ $extraHead = <<<HTML
     <style>
         body {
             min-height: 100vh;
-            background: linear-gradient(140deg, #fff8e7 0%, #dff1ff 55%, #eef9f1 100%);
+            background:
+                radial-gradient(circle at top left, rgba(255, 203, 112, 0.34), transparent 25%),
+                linear-gradient(140deg, #fff8e7 0%, #dff1ff 55%, #eef9f1 100%);
         }
 
         .profile-shell {
-            max-width: 1100px;
+            max-width: 1120px;
         }
 
         .hero-card,
         .panel-card {
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.65);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 18px 40px rgba(31, 73, 125, 0.12);
         }
 
+        .profile-hero {
+            background:
+                linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(255, 138, 0, 0.08)),
+                rgba(255, 255, 255, 0.94);
+        }
+
         .avatar-img {
-            width: 140px;
-            height: 140px;
+            width: 146px;
+            height: 146px;
             object-fit: cover;
-            border-radius: 28px;
-            border: 5px solid #fff;
+            border-radius: 30px;
+            border: 6px solid #fff;
             box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
         }
 
         .mini-post {
-            border-radius: 20px;
+            border-radius: 24px;
             background: #f8fbfd;
+            border: 1px solid rgba(23, 50, 77, 0.06);
+        }
+
+        .metric-tile {
+            border-radius: 22px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 248, 255, 0.96));
+            border: 1px solid rgba(23, 50, 77, 0.08);
         }
     </style>
 HTML;
@@ -52,7 +67,8 @@ require __DIR__ . '/partials/topbar.php';
 <main class="container profile-shell py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="mb-1">My Profile</h2>
+            <span class="soft-pill mb-2"><i class="bi bi-stars"></i> Personal dashboard</span>
+            <h2 class="mb-1 page-heading">My Profile</h2>
             <p class="text-muted mb-0">Manage your public identity and review your recent posts.</p>
         </div>
         <a href="index.php?action=home" class="btn btn-outline-secondary">Back to Feed</a>
@@ -62,7 +78,7 @@ require __DIR__ . '/partials/topbar.php';
 
     <div class="row g-4">
         <div class="col-lg-5">
-            <div class="hero-card p-4 h-100">
+            <div class="hero-card profile-hero p-4 h-100">
                 <div class="text-center mb-4">
                     <img src="assets/uploads/<?= htmlspecialchars(!empty($user['profile_pic']) ? $user['profile_pic'] : 'default-avatar.svg') ?>" class="avatar-img mb-3" alt="Profile image" onerror="this.src='assets/uploads/default-avatar.svg'">
                     <h3 class="mb-1"><?= htmlspecialchars($user['full_name']) ?></h3>
@@ -71,13 +87,13 @@ require __DIR__ . '/partials/topbar.php';
 
                 <div class="row g-3 text-center">
                     <div class="col-6">
-                        <div class="panel-card p-3">
+                        <div class="metric-tile p-3">
                             <div class="text-muted small">Joined</div>
                             <div class="fw-semibold"><?= htmlspecialchars(substr((string) $user['created_at'], 0, 10)) ?></div>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="panel-card p-3">
+                        <div class="metric-tile p-3">
                             <div class="text-muted small">Posts</div>
                             <div class="fw-semibold"><?= count($posts) ?></div>
                         </div>
@@ -85,7 +101,7 @@ require __DIR__ . '/partials/topbar.php';
                 </div>
 
                 <div class="mt-4">
-                    <h6>Bio</h6>
+                    <h6 class="mb-2">Bio</h6>
                     <p class="text-muted mb-0"><?= $user['bio'] ? nl2br(htmlspecialchars($user['bio'])) : 'No bio added yet.' ?></p>
                 </div>
             </div>
@@ -101,13 +117,13 @@ require __DIR__ . '/partials/topbar.php';
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Full Name</label>
-                        <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($user['full_name']) ?>" required maxlength="100">
+                        <input type="text" name="full_name" class="form-control" value="<?= htmlspecialchars($user['full_name']) ?>" required maxlength="100" placeholder="Enter your full name">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Bio / About</label>
-                        <textarea name="bio" class="form-control" rows="4" maxlength="500"><?= htmlspecialchars($user['bio']) ?></textarea>
+                        <textarea name="bio" class="form-control" rows="4" maxlength="500" placeholder="Tell people what you study, do, or care about."><?= htmlspecialchars($user['bio']) ?></textarea>
                     </div>
-                    <button class="btn btn-success" type="submit">
+                    <button class="btn btn-success px-4" type="submit">
                         <i class="bi bi-save"></i> Save Changes
                     </button>
                 </form>
@@ -115,7 +131,10 @@ require __DIR__ . '/partials/topbar.php';
 
             <div class="panel-card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="mb-0">My Posts</h4>
+                    <div>
+                        <h4 class="mb-0">My Posts</h4>
+                        <small class="text-muted">Your latest profile activity</small>
+                    </div>
                     <a href="index.php?action=home" class="btn btn-sm btn-outline-primary">Create New Post</a>
                 </div>
 
