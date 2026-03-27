@@ -180,7 +180,7 @@ require __DIR__ . '/partials/topbar.php';
                             <div>
                                 <div class="fw-semibold"><?= htmlspecialchars($post['full_name'] ?: $post['username']) ?></div>
                                 <div class="text-muted small">
-                                    @<?= htmlspecialchars($post['username']) ?> · <?= htmlspecialchars($post['created_at']) ?>
+                                    @<?= htmlspecialchars($post['username']) ?> | <?= htmlspecialchars($post['created_at']) ?>
                                 </div>
                                 <?php if ($isOnline): ?>
                                     <div class="small text-success">
@@ -266,7 +266,7 @@ require __DIR__ . '/partials/topbar.php';
                                 <div class="d-flex justify-content-between gap-3">
                                     <div>
                                         <div class="fw-semibold small"><?= htmlspecialchars($comment['full_name'] ?: $comment['username']) ?></div>
-                                        <div class="text-muted small">@<?= htmlspecialchars($comment['username']) ?> · <?= htmlspecialchars($comment['created_at']) ?></div>
+                                        <div class="text-muted small">@<?= htmlspecialchars($comment['username']) ?> | <?= htmlspecialchars($comment['created_at']) ?></div>
                                     </div>
                                     <?php if ($isCommentOwner): ?>
                                         <div class="d-flex gap-3">
