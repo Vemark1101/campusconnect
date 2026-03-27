@@ -24,6 +24,7 @@ require_once __DIR__ . '/../app/controllers/CommentController.php';
 require_once __DIR__ . '/../app/controllers/LikeController.php';
 require_once __DIR__ . '/../app/controllers/ProfileController.php';
 require_once __DIR__ . '/../app/controllers/ChatController.php';
+require_once __DIR__ . '/../app/controllers/NotificationController.php';
 
 // Get action
 $action = $_GET['action'] ?? 'login';
@@ -91,6 +92,10 @@ switch ($action) {
     case 'fetch_messages':
         $receiverId = isset($_GET['receiver_id']) ? (int) $_GET['receiver_id'] : 0;
         (new ChatController())->fetchMessages($receiverId);
+        break;
+
+    case 'mark_notifications_read':
+        (new NotificationController())->markAllRead();
         break;
 
     default:
