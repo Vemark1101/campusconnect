@@ -1,15 +1,25 @@
 <?php
 require_once __DIR__ . '/../models/ChatModel.php';
 require_once __DIR__ . '/../models/UserModel.php';
+require_once __DIR__ . '/../models/NotificationModel.php';
 
 class ChatController {
     private $chatModel;
     private $userModel;
+    private $notificationModel;
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) session_start();
         $this->chatModel = new ChatModel();
         $this->userModel = new UserModel();
+        $this->notificationModel = new NotificationModel();
+    }
+
+    private function loadNotifications() {
+        return [
+            $this->notificationModel->getRecentByUser($_SESSION['user_id']),
+            $this->notificationModel->countUnreadByUser($_SESSION['user_id'])
+        ];
     }
 
     // Chat page
@@ -37,6 +47,13 @@ class ChatController {
             $content = trim((string) ($_POST['content'] ?? ''));
             if ($content !== '') {
                 $this->chatModel->sendMessage($_SESSION['user_id'], $receiverId, $content);
+                $this->notificationModel->createNotification(
+                    $receiverId,
+                    $_SESSION['user_id'],
+                    'message',
+                    ($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Someone') . ' sent you a message.',
+                    'index.php?action=chat&receiver_id=' . (int) $_SESSION['user_id']
+                );
             }
         }
 
@@ -45,6 +62,7 @@ class ChatController {
 
         // Get all users except self
         $users = $this->userModel->getAllUsersExcept($_SESSION['user_id']);
+        [$notifications, $unreadCount] = $this->loadNotifications();
 
         require_once __DIR__ . '/../views/chat.php';
     }
