@@ -4,17 +4,27 @@ $extraHead = <<<HTML
     <style>
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #eef8ff 0%, #fff6e8 100%);
+            background:
+                radial-gradient(circle at top right, rgba(255, 196, 112, 0.24), transparent 24%),
+                linear-gradient(135deg, #eef8ff 0%, #fff6e8 100%);
         }
 
         .search-shell {
             max-width: 980px;
         }
 
+        .search-hero {
+            background: linear-gradient(135deg, rgba(23, 86, 118, 0.06), rgba(255, 159, 67, 0.08)), rgba(255, 255, 255, 0.88);
+            border-radius: 32px;
+            border: 1px solid rgba(23, 50, 77, 0.08);
+            box-shadow: 0 16px 38px rgba(31, 73, 125, 0.1);
+        }
+
         .result-card {
-            border-radius: 24px;
+            border-radius: 28px;
             background: rgba(255, 255, 255, 0.92);
             box-shadow: 0 14px 35px rgba(31, 73, 125, 0.1);
+            border: 1px solid rgba(23, 50, 77, 0.06);
         }
 
         .avatar {
@@ -26,16 +36,16 @@ $extraHead = <<<HTML
     </style>
 HTML;
 require __DIR__ . '/partials/head.php';
-$activePage = 'home';
+$activePage = 'search';
 require __DIR__ . '/partials/topbar.php';
 ?>
 <main class="container search-shell py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="search-hero p-4 p-md-5 mb-4">
         <div>
-            <h2 class="mb-1">User Search</h2>
+            <span class="soft-pill mb-2"><i class="bi bi-search-heart"></i> Discover students</span>
+            <h2 class="mb-1 page-heading">User Search</h2>
             <p class="text-muted mb-0">Find classmates by name or username.</p>
         </div>
-        <a href="index.php?action=home" class="btn btn-outline-secondary">Back to Feed</a>
     </div>
 
     <form method="GET" action="index.php" class="mb-4">
