@@ -19,6 +19,16 @@ class ChatController {
             exit();
         }
 
+        if ($receiverId <= 0 || $receiverId === (int) $_SESSION['user_id']) {
+            $users = $this->userModel->getAllUsersExcept($_SESSION['user_id']);
+            if (!empty($users)) {
+                header("Location: index.php?action=chat&receiver_id=" . (int) $users[0]['id']);
+            } else {
+                header("Location: index.php?action=home");
+            }
+            exit();
+        }
+
         // Update online timestamp
         $this->chatModel->updateLastActive($_SESSION['user_id']);
 
@@ -39,11 +49,15 @@ class ChatController {
 
     // Fetch messages for AJAX
     public function fetchMessages($receiverId) {
-        if (!isset($_SESSION['user_id'])) exit(json_encode([]));
+        if (!isset($_SESSION['user_id']) || $receiverId <= 0) {
+            header('Content-Type: application/json');
+            exit(json_encode([]));
+        }
 
         $this->chatModel->updateLastActive($_SESSION['user_id']);
         $messages = $this->chatModel->getMessages($_SESSION['user_id'], $receiverId);
 
+        header('Content-Type: application/json');
         echo json_encode($messages);
         exit();
     }
