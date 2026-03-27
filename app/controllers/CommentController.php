@@ -30,6 +30,8 @@ class CommentController {
 
         if ($postId <= 0 || $content === '') {
             $this->setFlash('error', 'Comment cannot be empty.');
+        } elseif (mb_strlen($content) > 500) {
+            $this->setFlash('error', 'Comment must be 500 characters or fewer.');
         } else {
             $this->commentModel->addComment($postId, $_SESSION['user_id'], $content);
             $this->setFlash('success', 'Comment added.');
@@ -50,6 +52,10 @@ class CommentController {
             $this->setFlash('error', 'You can only edit your own comments.');
         } elseif ($content === '') {
             $this->setFlash('error', 'Comment cannot be empty.');
+            header("Location: index.php?action=home&edit_comment=" . $commentId);
+            exit();
+        } elseif (mb_strlen($content) > 500) {
+            $this->setFlash('error', 'Comment must be 500 characters or fewer.');
             header("Location: index.php?action=home&edit_comment=" . $commentId);
             exit();
         } else {
