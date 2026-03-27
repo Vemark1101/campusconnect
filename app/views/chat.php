@@ -45,7 +45,7 @@ require __DIR__ . '/partials/topbar.php';
                    class="d-block p-2 border-bottom text-decoration-none text-dark <?= $user['id'] == $receiverId ? 'bg-light fw-semibold' : '' ?>">
                     <?= htmlspecialchars($user['username']) ?>
                     <?php if ($isOnline): ?>
-                        <span class="text-success">● Online</span>
+                        <span class="text-success">Online</span>
                     <?php endif; ?>
                 </a>
             <?php endforeach; ?>
