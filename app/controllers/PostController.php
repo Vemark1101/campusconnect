@@ -95,6 +95,8 @@ class PostController {
 
         if (!$ok) {
             $this->setFlash('error', $imageOrError);
+        } elseif (mb_strlen($content) > 1000) {
+            $this->setFlash('error', 'Post content must be 1000 characters or fewer.');
         } elseif ($content === '' && $imageOrError === null) {
             $this->setFlash('error', 'Post must contain text or an image.');
         } else {
@@ -137,6 +139,12 @@ class PostController {
 
         if ($content === '' && $image === null) {
             $this->setFlash('error', 'Post must contain text or an image.');
+            header("Location: index.php?action=home&edit_post=" . $postId);
+            exit();
+        }
+
+        if (mb_strlen($content) > 1000) {
+            $this->setFlash('error', 'Post content must be 1000 characters or fewer.');
             header("Location: index.php?action=home&edit_post=" . $postId);
             exit();
         }
