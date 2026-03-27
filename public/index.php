@@ -23,6 +23,7 @@ require_once __DIR__ . '/../app/controllers/PostController.php';
 require_once __DIR__ . '/../app/controllers/CommentController.php';
 require_once __DIR__ . '/../app/controllers/LikeController.php';
 require_once __DIR__ . '/../app/controllers/ProfileController.php';
+require_once __DIR__ . '/../app/controllers/ChatController.php';
 
 // Get action
 $action = $_GET['action'] ?? 'login';
@@ -46,8 +47,28 @@ switch ($action) {
         (new PostController())->home();
         break;
 
+    case 'create_post':
+        (new PostController())->create();
+        break;
+
+    case 'update_post':
+        (new PostController())->update();
+        break;
+
+    case 'delete_post':
+        (new PostController())->delete();
+        break;
+
     case 'comment':
         (new CommentController())->add();
+        break;
+
+    case 'update_comment':
+        (new CommentController())->update();
+        break;
+
+    case 'delete_comment':
+        (new CommentController())->delete();
         break;
 
     case 'like':
@@ -61,6 +82,16 @@ switch ($action) {
     case 'search':
     (new ProfileController())->search();
     break;
+
+    case 'chat':
+        $receiverId = isset($_GET['receiver_id']) ? (int) $_GET['receiver_id'] : 0;
+        (new ChatController())->chat($receiverId);
+        break;
+
+    case 'fetch_messages':
+        $receiverId = isset($_GET['receiver_id']) ? (int) $_GET['receiver_id'] : 0;
+        (new ChatController())->fetchMessages($receiverId);
+        break;
 
     default:
         (new AuthController())->login();
