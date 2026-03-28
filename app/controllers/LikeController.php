@@ -44,7 +44,7 @@ class LikeController {
                         $user_id,
                         'like',
                         ($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Someone') . ' liked your post.',
-                        'index.php?action=home'
+                        'index.php?action=home#post-' . $post_id
                     );
                 }
             }
