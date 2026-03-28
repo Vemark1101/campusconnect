@@ -3,9 +3,7 @@ $pageTitle = 'Chat - CampusConnect';
 $extraHead = <<<HTML
     <style>
         body {
-            background:
-                radial-gradient(circle at top left, rgba(255, 191, 105, 0.18), transparent 28%),
-                linear-gradient(135deg, #eef7ff 0%, #f7fbff 45%, #eef8ef 100%);
+            background: linear-gradient(135deg, #f6f1e8 0%, #d9ebff 50%, #edf7e6 100%);
         }
         .topbar {
             background: rgba(23, 86, 118, 0.92);
@@ -26,24 +24,24 @@ $extraHead = <<<HTML
         .chat-container {
             display: flex;
             min-height: 76vh;
-            background: rgba(255, 255, 255, 0.86);
-            border: 1px solid rgba(23, 50, 77, 0.08);
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 30px;
             overflow: hidden;
-            box-shadow: 0 24px 50px rgba(17, 48, 74, 0.12);
+            box-shadow: 0 20px 45px rgba(23, 86, 118, 0.12);
             backdrop-filter: blur(12px);
         }
         .users-list {
             width: 30%;
             min-width: 260px;
-            border-right: 1px solid rgba(23, 50, 77, 0.08);
+            border-right: 1px solid rgba(255, 255, 255, 0.45);
             overflow-y: auto;
-            background: linear-gradient(180deg, rgba(243, 248, 253, 0.95), rgba(255, 255, 255, 0.95));
+            background: rgba(255, 255, 255, 0.84);
         }
         .user-link {
             display: block;
             padding: 1rem 1.1rem;
-            border-bottom: 1px solid rgba(23, 50, 77, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.42);
             text-decoration: none;
             color: #16324f;
         }
@@ -67,7 +65,7 @@ $extraHead = <<<HTML
         }
         .received { background: #eef3f7; align-self: flex-start; }
         .chat-composer {
-            border-top: 1px solid rgba(23, 50, 77, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.42);
             padding-top: 1rem;
         }
 
