@@ -4,9 +4,7 @@ $extraHead = <<<HTML
     <style>
         body {
             min-height: 100vh;
-            background:
-                radial-gradient(circle at top right, rgba(255, 196, 112, 0.24), transparent 24%),
-                linear-gradient(135deg, #eef8ff 0%, #fff6e8 100%);
+            background: linear-gradient(135deg, #f6f1e8 0%, #d9ebff 50%, #edf7e6 100%);
         }
 
         .search-shell {
@@ -14,17 +12,17 @@ $extraHead = <<<HTML
         }
 
         .search-hero {
-            background: linear-gradient(135deg, rgba(23, 86, 118, 0.06), rgba(255, 159, 67, 0.08)), rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.92);
             border-radius: 32px;
             border: 1px solid rgba(23, 50, 77, 0.08);
-            box-shadow: 0 16px 38px rgba(31, 73, 125, 0.1);
+            box-shadow: 0 20px 45px rgba(23, 86, 118, 0.12);
         }
 
         .result-card {
             border-radius: 28px;
             background: rgba(255, 255, 255, 0.92);
-            box-shadow: 0 14px 35px rgba(31, 73, 125, 0.1);
-            border: 1px solid rgba(23, 50, 77, 0.06);
+            box-shadow: 0 20px 45px rgba(23, 86, 118, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .avatar {
