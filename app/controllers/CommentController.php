@@ -47,7 +47,7 @@ class CommentController {
                     (int) $_SESSION['user_id'],
                     'comment',
                     ($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Someone') . ' commented on your post.',
-                    'index.php?action=home'
+                    'index.php?action=home#post-' . $postId
                 );
             }
             $this->setFlash('success', 'Comment added.');
