@@ -173,7 +173,7 @@ require __DIR__ . '/partials/topbar.php';
             <?php foreach ($posts as $post): ?>
                 <?php $isOwner = (int) $post['user_id'] === (int) $_SESSION['user_id']; ?>
                 <?php $isOnline = !empty($post['last_active']) && (strtotime($post['last_active']) > time() - 60); ?>
-                <article class="glass-card p-4 mb-4">
+                <article id="post-<?= (int) $post['id'] ?>" class="glass-card p-4 mb-4">
                     <div class="d-flex justify-content-between gap-3">
                         <div class="d-flex gap-3">
                             <img class="avatar" src="assets/uploads/<?= htmlspecialchars($post['profile_pic'] ?? 'default-avatar.svg') ?>" alt="User" onerror="this.src='assets/uploads/default-avatar.svg'">
